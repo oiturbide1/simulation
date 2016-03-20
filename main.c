@@ -23,8 +23,9 @@ typedef struct clock{
 //And if it reaches the max number of processes
 //End the clock
 
-
+//Funct. returns zero if it was not able to sleep
 int threadSleep(int sec){
+    //Make sure this if-statement works
     #ifdef __linux__
         sleep(sec);
         return 1;
@@ -44,12 +45,14 @@ void *clockFunc(void *args){
     clockType * clk;
     clk = (clockType*)args;
     clk->counter = 0;
+    nap = clk->sleepTime;
     #ifdef _WIN32
-    nap = clk->sleepTime * 1000;
+    nap *= 1000;
     #endif // WINDOWS
     iter = clk->cycles;
     for (i = 0; i < iter; ++i){
-        threadSleep(nap);
+        if(!threadSleep(nap))
+            printf("Thread did not sleep\n");
         ++(clk->counter);
         printf("Current Clock Time is:%d\n", clk->counter);
     }
@@ -66,6 +69,7 @@ int main()
     clk = malloc(sizeof(clockType));
     clk->cycles = 10; //Total number of clock spins
     clk->sleepTime = 1; //1 Second
+    //Create Thread that runs clock
     rc = pthread_create(&threads[0],NULL,clockFunc,(clockType*) clk);
     if(rc){
         printf("ERROR. Return code from thread %d\n", rc);

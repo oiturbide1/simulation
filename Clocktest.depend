@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1458446702 source:c:\c projects\clocktest\main.c
+	<stdio.h>
+	<stdlib.h>
+	<pthread.h>
+	<windows.h>
+	<windows.h>
+	<unistd.h>
+
